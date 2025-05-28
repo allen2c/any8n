@@ -1,0 +1,31 @@
+version: '3.7'
+
+services:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n
+    restart: always
+    ports:
+      - "5678:5678"
+    environment:
+      # Set a timezone, e.g., "Europe/Berlin" or "Asia/Taipei"
+      # Use your local timezone or the one most relevant to your workflows
+      - GENERIC_TIMEZONE="Asia/Taipei"
+      - TZ="Asia/Taipei"
+      # Optional: Set a specific user/password if needed (otherwise n8n handles it)
+      # - N8N_BASIC_AUTH_ACTIVE=true
+      # - N8N_BASIC_AUTH_USER=<your_user>
+      # - N8N_BASIC_AUTH_PASSWORD=<your_password>
+      # Optional: Add any other environment variables you need for testing
+      # - N8N_LOG_LEVEL=debug # For more detailed logs during development
+    volumes:
+      # Mount the local n8n data volume for persistence
+      - n8n_data:/home/node/.n8n
+      # Optional: Mount a local directory to test file I/O nodes
+      # Create a folder named 'local-files' next to your docker-compose.yml
+      - ./local-files:/files
+    # Optional: If you want to connect to a local Postgres/MySQL
+    # you might need to add network settings or use 'host.docker.internal'
+
+volumes:
+  n8n_data:
+    driver: local # Defines a local volume to store n8n data
